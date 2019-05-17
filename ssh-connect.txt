@@ -1,0 +1,45 @@
+;============================================ 
+; Filename    : ssh_connect-03.ttl 
+; Description : SSH Auto login 
+; Author      : JUNZOU
+; Created     : 2011/03/20 
+; modified    : 
+;============================================ 
+;; ユーザ名／パスワード設定 
+USERNAME = 'ユーザ名' 
+PASSWORD = 'パスワード' 
+;============================================ 
+;; ①接続先ホスト選択 
+MESSAGE = 'Please choose a connection host.'#13#13 
+strconcat MESSAGE ' 1 - host01(xxxxxサーバ)'#13 
+strconcat MESSAGE ' 2 - host02(yyyyyサーバ)'#13 
+strconcat MESSAGE ' 3 - host03(zzzzzサーバ)' 
+inputbox MESSAGE 'Connection host choice'
+ 
+;; 文字列を数字に変換 
+str2int HOSTNUMB inputstr
+ 
+;; ②接続ホストIPアドレス指定 
+if HOSTNUMB = 1 then 
+    HOSTADDR = 'xxx.xxx.xxx.xxx' 
+elseif HOSTNUMB = 2 then 
+    HOSTADDR = 'xxx.xxx.xxx.xxx' 
+elseif HOSTNUMB = 3 then 
+    HOSTADDR = 'xxx.xxx.xxx.xxx' 
+else 
+    messagebox 'The unjust number was input.' 'Input error' 
+    end 
+endif
+ 
+;; ③コマンド組立て 
+COMMAND = HOSTADDR 
+strconcat COMMAND ':22 /ssh /2 /auth=password /user=' 
+strconcat COMMAND USERNAME 
+strconcat COMMAND ' /passwd=' 
+strconcat COMMAND PASSWORD
+ 
+;; ④接続 
+connect COMMAND
+ 
+;; ⑤マクロ終了 
+end

@@ -1,0 +1,40 @@
+;============================================ 
+; Filename    : ssh_connect-15.ttl 
+; Description : SSH Auto login 
+; Author      : JUNZOU 
+; Created     : 2011/04/29 
+; modified    : 
+;============================================ 
+;; ユーザ名／パスワード設定 
+HOSTADDR = '129.150.177.100' 
+USERNAME = 'opc'
+PASSFILE = 'C:\WorkSpace\000\EevInfo\Servers\verify-password.dat' 
+KEY_FILE = 'C:\WorkSpace\000\EevInfo\Servers\identity' 
+INIFILE  = 'C:\WorkSpace\000\EevInfo\Servers\SSH_port_forward.INI'
+;============================================ 
+;; ①パスワード取得 
+;;getpassword PASSFILE USERNAME PASSWORD
+PASSWORD = ''
+;; ②コマンド組立て 
+COMMAND = HOSTADDR 
+strconcat COMMAND ':22 /ssh /2 /auth=publickey /user=' 
+strconcat COMMAND USERNAME 
+strconcat COMMAND ' /passwd=' 
+strconcat COMMAND PASSWORD 
+strconcat COMMAND ' /keyfile=' 
+strconcat COMMAND KEY_FILE
+
+strconcat COMMAND ' /F='
+strconcat COMMAND INIFILE
+
+;; ③サーバへ接続 
+connect COMMAND
+ 
+wait '$'
+sendln 'sudo su - oracle'
+wait '$'
+sendln 'cd /u01/data/domains/TEST01SO_domain/servers/TEST01SO_server_1/logs/'
+;; ④マクロ終了 
+end
+
+;wait 'Password:'
